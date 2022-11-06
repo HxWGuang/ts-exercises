@@ -64,6 +64,9 @@ export function getObjectKeys(criteria: PartialKeys) {
     return Object.keys(criteria) as (keyof Omit<Person,"type">)[];
 }
 
+/**
+ *  内容： 函数重载
+ */
 export function filterPersons(persons: Person[], personType: 'user', criteria: Partial<Omit<User, "type">>): User[];
 export function filterPersons(persons: Person[], personType: 'admin', criteria: Partial<Omit<Admin, "type">>): Admin[];
 export function filterPersons(persons: Person[], personType: string, criteria: PartialKeys): Person[] {
