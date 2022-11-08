@@ -1,7 +1,5 @@
 /*
 
-    ** 未通过 **
-
 Intro:
 
     Our attempt to Open Source didn't work quite as
@@ -29,19 +27,23 @@ Exercise:
 
 */
 
+/**
+ * 用到泛型的方法的返回值多确认几遍，尽量自己写
+ */
+
 export class ObjectManipulator<T> {
 
     constructor(protected obj: T) {}
 
-    public set<K extends string, V>(key: K, value: V) {
-        return new ObjectManipulator({...this.obj, [key]: value});
+    public set<K extends string, V>(key: K, value: V): ObjectManipulator<T & {[NK in K]:V}> {     //不手动添加返回值类型时推断出来的返回值类型： ObjectManipulator<T & {[x: string]: V;}>
+        return new ObjectManipulator({...this.obj, [key]: value}) as ObjectManipulator<T & {[NK in K]:V}>;  //通过计算出来的结果要加[]，使用Symbol时也是要加
     }
 
-    public get(key: keyof T) {
+    public get<K extends keyof T>(key: K) {
         return this.obj[key];
     }
 
-    public delete(key: keyof T) {
+    public delete<K extends keyof T>(key: K): ObjectManipulator<Omit<T,K>> {  //不手动添加返回值类型时ts推断出来的返回值： ObjectManipulator<T>
         const newObj = {...this.obj};
         delete newObj[key];
         return new ObjectManipulator(newObj);
